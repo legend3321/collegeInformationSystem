@@ -20,7 +20,7 @@ export default function Home() {
   return (
     <Container sx={{ pt: 0 }}>
       <Marquee gradient>
-        <Typography variant="body1" sx={{ bgcolor: "#fff", py: 1 }}>
+        <Typography variant="body1" sx={{ bgcolor: "#fff", py: 1, px: 20 }}>
           The Department of Computer Science and Information Technology |
           Graphic Era (Deemed to be University)
         </Typography>

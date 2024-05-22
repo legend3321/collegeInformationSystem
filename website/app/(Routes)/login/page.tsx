@@ -1,3 +1,4 @@
+"use client";
 import {
   Box,
   Grid,
@@ -8,8 +9,44 @@ import {
   Button,
   Link,
 } from "@mui/material";
+import { useState } from "react";
+
+import axios from "axios";
+
+import { login } from "@/app/_api/Auth";
+import { redirect } from "next/navigation";
+import { headers } from "next/headers";
 
 export default function Login() {
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+  const [error, setError] = useState("");
+
+  const handleLogin = async () => {
+    setError("");
+    try {
+      const response = await axios.post(
+        "http://127.0.0.1:8000/auth/login/",
+        {
+          email,
+          password,
+        },
+        {
+          headers: {
+            "Content-Type": "multipart/form-data",
+          },
+        }
+      );
+      console.log(response);
+      if (response.status === 200) {
+        console.log(response);
+        // redirect("/dashboard");
+      }
+    } catch (error) {
+      setError("Invalid email or password");
+    }
+  };
+
   return (
     <Container>
       <Grid container alignItems={"center"} justifyContent={"space-between"}>
@@ -43,20 +80,34 @@ export default function Login() {
             label="Email"
             variant="outlined"
             fullWidth
+            value={email}
+            onChange={(e) => setEmail(e.target.value)}
             sx={{ mb: 2 }}
+            required
           />
           <TextField
             label="Password"
             type="password"
+            value={password}
+            onChange={(e) => setPassword(e.target.value)}
             variant="outlined"
             fullWidth
             sx={{ mb: 2 }}
+            required
           />
-          <Button variant="contained" fullWidth sx={{ py: 2, mb: 4 }}>
+          <Button
+            variant="contained"
+            fullWidth
+            sx={{ py: 2, mb: 4 }}
+            onClick={handleLogin}
+          >
             <Typography variant="h6" sx={{ letterSpacing: 3 }}>
               Login
             </Typography>
           </Button>
+          <Typography variant="body1" color="error">
+            {error}
+          </Typography>
           <Typography variant="body1" textAlign={"center"}>
             Not joined yet?{" "}
             <Link href="/signup" sx={{ textDecoration: "none" }}>
