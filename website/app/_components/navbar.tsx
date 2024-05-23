@@ -19,7 +19,16 @@ interface Props {
 }
 
 export default function Navbar(props: Props) {
+  //localStorage.removeItem("user");
+  // let user = localStorage.getItem("user") || "";
+  // user = JSON.parse(user);
   const user = null;
+
+  //console.log(user);
+
+  const logout = () => {
+    localStorage.removeItem("user");
+  };
 
   const { window } = props;
 
@@ -103,7 +112,7 @@ export default function Navbar(props: Props) {
             {user ? (
               <>
                 <Typography variant="body1" sx={{ mr: 2 }}>
-                  <Button>Hi, user</Button>
+                  <Button onClick={logout}>Hi, {user}</Button>
                 </Typography>
               </>
             ) : (

@@ -1,50 +1,26 @@
 from .models import Student, Teacher, Department, Section, Course
 from .serializers import StudentSerializer, TeacherSerializer, DepartmentSerializer, SectionSerializer, CourseSerializer, UserSerializer
-from rest_framework.decorators import api_view
-from rest_framework.response import Response
-from django.contrib.auth import login
-from rest_framework.authtoken.models import Token
+from rest_framework.decorators import api_view # type: ignore
+from rest_framework.response import Response # type: ignore
+from rest_framework.authtoken.models import Token # type: ignore
 from django.contrib.auth import authenticate, login
-from rest_framework.views import APIView
+from rest_framework.views import APIView # type: ignore
 from django.contrib.auth.models import User
 
 # Create your views here.
 
 @api_view(['POST'])
 def login_view(request):
-    username = request.data.get('username')
-    password = request.data.get('password')
+    username = request.data['username']
+    password = request.data['password']
 
     user = authenticate(request, username=username, password=password)
     if user is not None:
         login(request, user)
-        token, _ = Token.objects.get_or_create(user=user)
-        return Response({'token': token.key})
+        user = UserSerializer(user)
+        return Response(user.data)
     else:
-        return Response({'error': 'Invalid credentials'}, status=400)
-    
-
-@api_view(['POST'])
-def register_view(request):
-    username = request.data['username']
-    password = request.data['password']
-    email = request.data['email']
-    first_name = request.data['first_name']
-    last_name = request.data['last_name']
-
-    user = User.objects.get(username=username)
-    if user is not None:
-        return Response({'error': 'User already exists'}, status=400)
-    
-
-    user = User.objects.create_user(username=username, password=password, email=email, first_name=first_name, last_name=last_name)
-    user.save()
-    if user is not None:
-        login(request, user)
-        token, _ = Token.objects.get_or_create(user=user)
-        return Response({'token': token.key})
-    else:
-        return Response({'error': 'Invalid credentials'}, status=400)
+        return Response("Invalid credentials", status=204)
     
 class UserAPIView(APIView):
     def get(self, request):
@@ -53,12 +29,15 @@ class UserAPIView(APIView):
         return Response(serializer.data)
 
     def post(self, request):
-        print(request.data)
         serializer = UserSerializer(data=request.data)
         if serializer.is_valid():
             serializer.save()
+            user = User.objects.get(username=request.data['username'])
+            user.set_password(request.data['password'])
+            user.save()
             return Response({"data": serializer.data}, status=201)
-        return Response({"error" : serializer.errors}, status=400)
+        
+        return Response("User Already Exists", status=204)
 
     def put(self, request, pk):
         user = User.objects.get(id=pk)

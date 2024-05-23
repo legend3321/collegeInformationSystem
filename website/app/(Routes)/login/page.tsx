@@ -11,15 +11,47 @@ import {
   FormControl,
 } from "@mui/material";
 import { useState } from "react";
+import axios from "axios";
+import { useRouter } from "next/navigation";
 
 export default function Login() {
+  const router = useRouter();
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
   const [error, setError] = useState("");
 
   const handleLogin = async () => {
     setError("");
-    console.log(username, password);
+    if (!username || !password) {
+      setError("All fields are required");
+      return;
+    }
+
+    try {
+      const response = await await axios.post(
+        "http://127.0.0.1:8000/auth/login/",
+        {
+          username,
+          password,
+        }
+      );
+
+      console.log(response);
+
+      if (response.status === 200) {
+        console.log(response.data);
+        localStorage.setItem("user", JSON.stringify(response.data));
+        router.push("/");
+      } else if (response.status === 204) {
+        setError("Invalid credentials");
+        setError(response.data);
+        return;
+      }
+    } catch (e) {
+      console.log(e);
+      setError("An error occurred. Please try again later.");
+      return;
+    }
   };
 
   return (
@@ -80,7 +112,12 @@ export default function Login() {
                 Login
               </Typography>
             </Button>
-            <Typography variant="body1" color="error">
+            <Typography
+              variant="body1"
+              color="error"
+              textAlign={"center"}
+              sx={{ mb: 2 }}
+            >
               {error}
             </Typography>
             <Typography variant="body1" textAlign={"center"}>

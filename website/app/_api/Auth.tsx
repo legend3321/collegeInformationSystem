@@ -2,10 +2,10 @@
 
 import axios from "axios";
 
-export const login = async (email: string, password: string) => {
+export const login = async (username: string, password: string) => {
   console.log(1);
   const response = await axios.post("http://127.0.0.1:8000/auth/login/", {
-    email,
+    username,
     password,
   });
   console.log(response);

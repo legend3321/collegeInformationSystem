@@ -44,10 +44,3 @@ class Course(models.Model):
     course_semester = models.IntegerField()
     course_year = models.IntegerField()
     course_credit_hours = models.IntegerField()
-
-
-
-
-
-
-

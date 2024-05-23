@@ -42,7 +42,7 @@ export default function Login() {
 
     try {
       const response = await axios.post(
-        "http://localhost:8000/api/User/",
+        "http://localhost:8000/auth/user/",
         {
           username,
           email,
@@ -57,13 +57,15 @@ export default function Login() {
         }
       );
 
+      console.log(response);
+
       if (response.status === 201) {
         redirect("/login");
       } else {
-        setError("An error occurred, please try again");
+        setError(response.data.error);
       }
     } catch (error) {
-      setError("An error occurred, please try again");
+      setError("Something went wrong. Please try again later." + error);
     }
   };
 
