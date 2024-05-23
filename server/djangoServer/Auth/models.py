@@ -8,7 +8,7 @@ class Department(models.Model):
 
 class Teacher(models.Model):
     teacher_id = models.ForeignKey(User, on_delete=models.CASCADE)
-    teacher_department = models.ForeignKey(Department)
+    teacher_department = models.ForeignKey(Department, on_delete=models.DO_NOTHING)
     teacher_office = models.CharField(max_length=50)
     teacher_phone = models.CharField(max_length=50)
     teacher_description = models.CharField(max_length=200)
@@ -28,9 +28,9 @@ class Section(models.Model):
 
 class Student(models.Model):
     student_id = models.ForeignKey(User, on_delete=models.CASCADE)
-    section = models.ForeignKey(Section)
+    section = models.ForeignKey(Section, on_delete=models.DO_NOTHING)
     roll_number = models.IntegerField()
-    student_department = models.ForeignKey(Department)
+    student_department = models.ForeignKey(Department, on_delete=models.DO_NOTHING)
     student_semester = models.IntegerField()
     student_year = models.IntegerField()
     student_phone = models.CharField(max_length=50)
@@ -40,7 +40,7 @@ class Course(models.Model):
     course_id = models.AutoField(primary_key=True)
     course_name = models.CharField(max_length=50)
     course_description = models.CharField(max_length=200)
-    course_department = models.ForeignKey(Department)
+    course_department = models.ForeignKey(Department, on_delete=models.DO_NOTHING)
     course_semester = models.IntegerField()
     course_year = models.IntegerField()
     course_credit_hours = models.IntegerField()
