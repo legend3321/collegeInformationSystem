@@ -1,20 +1,53 @@
 from django.db import models
+from django.contrib.auth.models import User
 
-# Create your models here.
+class Department(models.Model):
+    department_id = models.AutoField(primary_key=True)
+    department_name = models.CharField(max_length=50)
+    department_description = models.CharField(max_length=200)
+
+class Teacher(models.Model):
+    teacher_id = models.ForeignKey(User, on_delete=models.CASCADE)
+    teacher_department = models.ForeignKey(Department)
+    teacher_office = models.CharField(max_length=50)
+    teacher_phone = models.CharField(max_length=50)
+    teacher_description = models.CharField(max_length=200)
+
+class Section(models.Model):
+    section_id = models.AutoField(primary_key=True)
+    section_name = models.CharField(max_length=50)
+    section_number = models.IntegerField()
+    section_capacity = models.IntegerField()
+    section_instructor = models.CharField(max_length=50)
+    section_time = models.CharField(max_length=50)
+    section_days = models.CharField(max_length=50)
+    section_semester = models.CharField(max_length=50)
+    section_year = models.IntegerField()
+    section_course = models.CharField(max_length=50)
+    section_description = models.CharField(max_length=200)
 
 class Student(models.Model):
-    fname = models.CharField(max_length=100)
-    mname = models.CharField(max_length=100)
-    lname = models.CharField(max_length=100)
-    email = models.EmailField(max_length=100, unique=True)
-    password = models.CharField(max_length=100)
-    section = models.CharField(max_length=10)
-    roll = models.IntegerField()
-    year = models.IntegerField()
-    semester = models.IntegerField()
-    phone = models.CharField(max_length=15)
-    studentId = models.CharField(max_length=10)
+    student_id = models.ForeignKey(User, on_delete=models.CASCADE)
+    section = models.ForeignKey(Section)
+    roll_number = models.IntegerField()
+    student_department = models.ForeignKey(Department)
+    student_semester = models.IntegerField()
+    student_year = models.IntegerField()
+    student_phone = models.CharField(max_length=50)
+    student_description = models.CharField(max_length=200)
 
-    def __str__(self):
-        return self.studentId
-    
+class Course(models.Model):
+    course_id = models.AutoField(primary_key=True)
+    course_name = models.CharField(max_length=50)
+    course_description = models.CharField(max_length=200)
+    course_department = models.ForeignKey(Department)
+    course_semester = models.IntegerField()
+    course_year = models.IntegerField()
+    course_credit_hours = models.IntegerField()
+
+
+
+
+
+
+

@@ -1,6 +1,5 @@
 "use client";
 
-import { Label } from "@mui/icons-material";
 import {
   Box,
   Grid,
@@ -11,39 +10,18 @@ import {
   Button,
   Link,
   FormControl,
-  Select,
-  MenuItem,
-  InputLabel,
 } from "@mui/material";
 import { useState } from "react";
 
 export default function Login() {
   const [email, setEmail] = useState("");
-  const [classRollNo, setClassRollNo] = useState<number>();
   const [password, setPassword] = useState("");
-  const [collegeId, setCollegeId] = useState<number>();
-  const [year, setYear] = useState<number>();
-  const [semester, setSemester] = useState<number>();
+  const [username, setUsername] = useState<number>();
   const [firstName, setFirstName] = useState("");
-  const [middleName, setMiddleName] = useState("");
   const [lastName, setLastName] = useState("");
-  const [phone, setPhone] = useState<number>();
-  const [section, setSection] = useState("");
 
   const handleClick = () => {
-    console.log({
-      email,
-      classRollNo,
-      password,
-      collegeId,
-      year,
-      semester,
-      firstName,
-      middleName,
-      lastName,
-      phone,
-      section,
-    });
+    console.log("clicked");
   };
 
   return (
@@ -70,7 +48,7 @@ export default function Login() {
             }}
           />
         </Grid>
-        <Grid item md={6} sm={12} xs={12} sx={{ mt: { xs: 5, md: 0 } }}>
+        <Grid item md={6} xs={12} sx={{ mt: { xs: 5, md: 0 } }}>
           <Typography variant="h3">Sign Up</Typography>
           <Typography variant="h6">
             Welcome to GEU Student Management!
@@ -81,44 +59,20 @@ export default function Login() {
 
           <Divider sx={{ my: 2 }} />
           <FormControl fullWidth>
-            <InputLabel id="section">Section</InputLabel>
-            <Select
-              labelId="section"
-              label="Section"
-              variant="outlined"
-              value={section}
-              onChange={(e) => {
-                setSection(e.target.value);
-              }}
-              fullWidth
-              sx={{ mb: 2 }}
-              required
-            >
-              <MenuItem value="A">A</MenuItem>
-              <MenuItem value="B">B</MenuItem>
-              <MenuItem value="C">C</MenuItem>
-              <MenuItem value="D">D</MenuItem>
-              <MenuItem value="E">E</MenuItem>
-              <MenuItem value="F">F</MenuItem>
-              <MenuItem value="G">G</MenuItem>
-              <MenuItem value="H">H</MenuItem>
-              <MenuItem value="I">I</MenuItem>
-              <MenuItem value="cst/spl1">CST/SPL 1</MenuItem>
-              <MenuItem value="cst/spl2">CST/SPL 2</MenuItem>
-              <MenuItem value="cc">CC</MenuItem>
-            </Select>
             <TextField
-              label="Class Roll Number"
+              label="College ID"
               variant="outlined"
-              type="number"
-              value={classRollNo}
-              onChange={(e) => {
-                setClassRollNo(parseInt(e.target.value));
-              }}
               fullWidth
-              sx={{ mb: 2 }}
+              value={username}
+              onChange={(e) => {
+                setUsername(parseInt(e.target.value));
+              }}
+              sx={{ mb: 1 }}
               required
             />
+            <Typography variant="subtitle2" sx={{ mb: 2 }}>
+              Note: Student ID will be used for login
+            </Typography>
             <Box sx={{ display: "flex", width: "100%" }}>
               <TextField
                 label="First Name"
@@ -127,15 +81,6 @@ export default function Login() {
                 value={firstName}
                 onChange={(e) => {
                   setFirstName(e.target.value);
-                }}
-                sx={{ mb: 2, flexGrow: 1 }}
-              />
-              <TextField
-                label="Middle Name"
-                variant="outlined"
-                value={middleName}
-                onChange={(e) => {
-                  setMiddleName(e.target.value);
                 }}
                 sx={{ mb: 2, flexGrow: 1 }}
               />
@@ -159,61 +104,6 @@ export default function Login() {
               value={email}
               onChange={(e) => {
                 setEmail(e.target.value);
-              }}
-              sx={{ mb: 2 }}
-              required
-            />
-            <TextField
-              label="Phone Number"
-              type="number"
-              variant="outlined"
-              placeholder="10 digit number"
-              fullWidth
-              value={phone}
-              onChange={(e) => {
-                setPhone(parseInt(e.target.value));
-              }}
-              sx={{ mb: 2 }}
-            />
-            <TextField
-              label="Year"
-              variant="outlined"
-              type="number"
-              max={2025}
-              min={2015}
-              fullWidth
-              placeholder="Y Y Y Y"
-              value={year}
-              onChange={(e) => {
-                setYear(parseInt(e.target.value));
-                setCollegeId(parseInt(e.target.value.slice(2, 4)));
-              }}
-              sx={{ mb: 2 }}
-              required
-            />
-            <TextField
-              label="College ID"
-              variant="outlined"
-              fullWidth
-              value={collegeId}
-              onChange={(e) => {
-                setCollegeId(parseInt(e.target.value));
-              }}
-              sx={{ mb: 2 }}
-              required
-            />
-
-            <TextField
-              label="Current Semester"
-              variant="outlined"
-              type="number"
-              placeholder="1-8"
-              min={1}
-              max={8}
-              fullWidth
-              value={semester}
-              onChange={(e) => {
-                setSemester(parseInt(e.target.value));
               }}
               sx={{ mb: 2 }}
               required

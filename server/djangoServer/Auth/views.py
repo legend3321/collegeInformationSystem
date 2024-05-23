@@ -1,57 +1,161 @@
+from .models import Student, Teacher, Department, Section, Course
 
-from .models import Student
+from rest_framework.decorators import api_view
+from rest_framework.response import Response
+from django.contrib.auth import login
+from rest_framework.authtoken.models import Token
+from django.contrib.auth import authenticate, login
+from rest_framework.views import APIView
 
 # Create your views here.
 
-from django.http import HttpResponse, JsonResponse
-from django.core import serializers
-from django.views.decorators.csrf import csrf_exempt
-from django.middleware import csrf
+@api_view(['POST'])
+def login_view(request):
+    username = request.data.get('username')
+    password = request.data.get('password')
 
-
-def csrf_token(request):
-    return HttpResponse(csrf.get_token(request))
-
-@csrf_exempt
-def login(request):
-    if request.method == 'POST':
-        email = request.POST.get('email')
-        password = request.POST.get('password')
-        if(email == None or password == None):
-            return HttpResponse("Fields Missing")
-        try:
-            student = Student.objects.get(email=email, password=password)
-            data = serializers.serialize('json', [student, ])
-            
-            return JsonResponse(data, safe=False)
-        except Student.DoesNotExist:
-            return HttpResponse("Invalid credentials")
-    else:  
-        return HttpResponse("Invalid request method")
-
+    user = authenticate(request, username=username, password=password)
+    if user is not None:
+        login(request, user)
+        token, _ = Token.objects.get_or_create(user=user)
+        return Response({'token': token.key})
+    else:
+        return Response({'error': 'Invalid credentials'}, status=400)
     
 
-def register(request):
-    if request.method == 'POST':
-        email = request.POST.get('email')
-        password = request.POST.get('password')
-        fname = request.POST.get('fname')
-        mname = request.POST.get('mname')
-        lname = request.POST.get('lname')
-        section = request.POST.get('section')
-        roll = request.POST.get('roll')
-        year = request.POST.get('year')
-        semester = request.POST.get('semester')
-        phone = request.POST.get('phone')
-        studentId = request.POST.get('studentId')
-        try:
-            student = Student.objects.get(email=email)
-            return HttpResponse("User already exists")
-        except Student.DoesNotExist:
-            student = Student(email=email, password=password, fname=fname, mname=mname, lname=lname, section=section, roll=roll, year=year, semester=semester, phone=phone, studentId=studentId)
-            student.save()
-            return HttpResponse("User created successfully")
-    else:
-        return HttpResponse(csrf.get_token(request))
+@api_view(['POST'])
+def register_view(request):
+    username = request.data.get('username')
+    password = request.data.get('password')
+    email = request.data.get('email')
+    first_name = request.data.get('first_name')
+    last_name = request.data.get('last_name')
+
+    if username is None or password is None or email is None or first_name is None or last_name is None:
+        return Response({'error': 'Please provide all required fields'}, status=400)
+
+    user = User.objects.create_user(username=username, password=password, email=email, first_name=first_name, last_name=last_name)
+    user.save()
+    return Response({'message': 'User created successfully'}, status=201)
+
+class StudentAPIView(APIView):
+    def get(self, request):
+        students = Student.objects.all()
+        serializer = StudentSerializer(students, many=True)
+        return Response(serializer.data)
+
+    def post(self, request):
+        serializer = StudentSerializer(data=request.data)
+        if serializer.is_valid():
+            serializer.save()
+        return Response(serializer.data)
+
+    def put(self, request, pk):
+        student = Student.objects.get(student_id=pk)
+        serializer = StudentSerializer(instance=student, data=request.data)
+        if serializer.is_valid():
+            serializer.save()
+        return Response(serializer.data)
+
+    def delete(self, request, pk):
+        student = Student.objects.get(student_id=pk)
+        student.delete()
+        return Response('Student deleted successfully')
+    
+class TeacherAPIView(APIView):
+    def get(self, request):
+        teachers = Teacher.objects.all()
+        serializer = TeacherSerializer(teachers, many=True)
+        return Response(serializer.data)
+
+    def post(self, request):
+        serializer = TeacherSerializer(data=request.data)
+        if serializer.is_valid():
+            serializer.save()
+        return Response(serializer.data)
+
+    def put(self, request, pk):
+        teacher = Teacher.objects.get(teacher_id=pk)
+        serializer = TeacherSerializer(instance=teacher, data=request.data)
+        if serializer.is_valid():
+            serializer.save()
+        return Response(serializer.data)
+
+    def delete(self, request, pk):
+        teacher = Teacher.objects.get(teacher_id=pk)
+        teacher.delete()
+        return Response('Teacher deleted successfully')
+    
+class DepartmentAPIView(APIView):
+    def get(self, request):
+        departments = Department.objects.all()
+        serializer = DepartmentSerializer(departments, many=True)
+        return Response(serializer.data)
+
+    def post(self, request):
+        serializer = DepartmentSerializer(data=request.data)
+        if serializer.is_valid():
+            serializer.save()
+        return Response(serializer.data)
+
+    def put(self, request, pk):
+        department = Department.objects.get(department_id=pk)
+        serializer = DepartmentSerializer(instance=department, data=request.data)
+        if serializer.is_valid():
+            serializer.save()
+        return Response(serializer.data)
+
+    def delete(self, request, pk):
+        department = Department.objects.get(department_id=pk)
+        department.delete()
+        return Response('Department deleted successfully')
 
 
+class SectionAPIView(APIView):
+    def get(self, request):
+        sections = Section.objects.all()
+        serializer = SectionSerializer(sections, many=True)
+        return Response(serializer.data)
+
+    def post(self, request):
+        serializer = SectionSerializer(data=request.data)
+        if serializer.is_valid():
+            serializer.save()
+        return Response(serializer.data)
+
+    def put(self, request, pk):
+        section = Section.objects.get(section_id=pk)
+        serializer = SectionSerializer(instance=section, data=request.data)
+        if serializer.is_valid():
+            serializer.save()
+        return Response(serializer.data)
+
+    def delete(self, request, pk):
+        section = Section.objects.get(section_id=pk)
+        section.delete()
+        return Response('Section deleted successfully')
+
+
+class CourseAPIView(APIView):
+    def get(self, request):
+        courses = Course.objects.all()
+        serializer = CourseSerializer(courses, many=True)
+        return Response(serializer.data)
+
+    def post(self, request):
+        serializer = CourseSerializer(data=request.data)
+        if serializer.is_valid():
+            serializer.save()
+        return Response(serializer.data)
+
+    def put(self, request, pk):
+        course = Course.objects.get(course_id=pk)
+        serializer = CourseSerializer(instance=course, data=request.data)
+        if serializer.is_valid():
+            serializer.save()
+        return Response(serializer.data)
+
+    def delete(self, request, pk):
+        course = Course.objects.get(course_id=pk)
+        course.delete()
+        return Response('Course deleted successfully')
