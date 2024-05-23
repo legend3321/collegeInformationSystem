@@ -85,9 +85,20 @@ class StudentAPIView(APIView):
         student.delete()
         return Response('Student deleted successfully')
     
+
+@api_view(['GET'])
+def get_teacher(request, pk):
+    user = User.objects.get(id=pk)
+    print(user.teacher.teacher_id)
+    teachers = Teacher.objects.filter(teacher_id = user.teacher.teacher_id)
+    serializer = TeacherSerializer(teachers, many=True)
+    if serializer.data == []:
+        return Response({'message':'No teacher found'}, status=204)
+    return Response(serializer.data)
+    
 class TeacherAPIView(APIView):
-    def get(self, request, pk):
-        teachers = Teacher.objects.get(teacher_id=pk)
+    def get(self, request):
+        teachers = Teacher.objects.all()
         serializer = TeacherSerializer(teachers, many=True)
         return Response(serializer.data)
 
@@ -141,19 +152,29 @@ def get_section(request, pk):
         return Response({'message':'No section found'}, status=204)
     return Response(serializer.data)
 
+@api_view(['GET'])
+def get_section_teacher(request, pk):
+    user = User.objects.get(id=pk)
+    sections = Section.objects.filter(section_instructor=user.teacher.id)
+    serializer = SectionSerializer(sections, many=True)
+    if serializer.data == []:
+        return Response({'message':'No section found'}, status=204)
+    return Response(serializer.data)
+
 class SectionAPIView(APIView):
-    def get(self, request, pk):
-        sections = Section.objects.filter(section_department=pk)
+    def get(self, request):
+        sections = Section.objects.all()
         serializer = SectionSerializer(sections, many=True)
-        if serializer.data == []:
-            return Response({'message':'No section found'}, status=204)
         return Response(serializer.data)
 
     def post(self, request):
         serializer = SectionSerializer(data=request.data)
         if serializer.is_valid():
             serializer.save()
-        return Response(serializer.data)
+            return Response(serializer.data)
+        else:
+            print(serializer.errors)
+            return Response(serializer.errors)
 
     def put(self, request, pk):
         section = Section.objects.get(section_id=pk)
