@@ -36,15 +36,13 @@ export default function Login() {
         }
       );
 
-      console.log(response);
-
       if (response.status === 200) {
         console.log(response.data);
         localStorage.setItem("user", JSON.stringify(response.data));
-        router.push("/");
+        router.push("/dashboard");
       } else if (response.status === 204) {
+        console.log(response);
         setError("Invalid credentials");
-        setError(response.data);
         return;
       }
     } catch (e) {

@@ -7,6 +7,7 @@ from django.contrib.auth import authenticate, login
 from rest_framework.views import APIView # type: ignore
 from django.contrib.auth.models import User
 
+
 # Create your views here.
 
 @api_view(['POST'])
@@ -20,7 +21,7 @@ def login_view(request):
         user = UserSerializer(user)
         return Response(user.data)
     else:
-        return Response("Invalid credentials", status=204)
+        return Response({"message" : "Invalid credentials"}, status=204)
     
 class UserAPIView(APIView):
     def get(self, request):
@@ -34,6 +35,7 @@ class UserAPIView(APIView):
             serializer.save()
             user = User.objects.get(username=request.data['username'])
             user.set_password(request.data['password'])
+            user.groups.add(1)
             user.save()
             return Response({"data": serializer.data}, status=201)
         
@@ -50,6 +52,14 @@ class UserAPIView(APIView):
         user = User.objects.get(id=pk)
         user.delete()
         return Response('User deleted successfully')
+    
+@api_view(['GET'])
+def get_student(request, pk):
+    students = Student.objects.filter(student_id=pk)
+    serializer = StudentSerializer(students, many=True)
+    if serializer.data == []:
+        return Response({'message':'No student found'}, status=204)
+    return Response(serializer.data)
 
 class StudentAPIView(APIView):
     def get(self, request):
@@ -76,8 +86,8 @@ class StudentAPIView(APIView):
         return Response('Student deleted successfully')
     
 class TeacherAPIView(APIView):
-    def get(self, request):
-        teachers = Teacher.objects.all()
+    def get(self, request, pk):
+        teachers = Teacher.objects.get(teacher_id=pk)
         serializer = TeacherSerializer(teachers, many=True)
         return Response(serializer.data)
 
@@ -123,11 +133,20 @@ class DepartmentAPIView(APIView):
         department.delete()
         return Response('Department deleted successfully')
 
+@api_view(['GET'])
+def get_section(request, pk):
+    sections = Section.objects.filter(section_department=pk)
+    serializer = SectionSerializer(sections, many=True)
+    if serializer.data == []:
+        return Response({'message':'No section found'}, status=204)
+    return Response(serializer.data)
 
 class SectionAPIView(APIView):
-    def get(self, request):
-        sections = Section.objects.all()
+    def get(self, request, pk):
+        sections = Section.objects.filter(section_department=pk)
         serializer = SectionSerializer(sections, many=True)
+        if serializer.data == []:
+            return Response({'message':'No section found'}, status=204)
         return Response(serializer.data)
 
     def post(self, request):

@@ -61,8 +61,8 @@ export default function Login() {
 
       if (response.status === 201) {
         router.push("/login");
-      } else {
-        setError(response.data.error);
+      } else if (response.status === 204) {
+        setError("User already exists. Please login.");
       }
     } catch (error) {
       setError("Something went wrong. Please try again later." + error);

@@ -13,6 +13,7 @@ import {
 import { red } from "@mui/material/colors";
 import Image from "next/image";
 import { useEffect, useState } from "react";
+import { useRouter } from "next/navigation";
 
 interface Props {
   window?: () => Window;
@@ -20,17 +21,19 @@ interface Props {
 }
 
 export default function Navbar(props: Props) {
+  const router = useRouter();
   const [user, setUser] = useState({} as any);
 
   useEffect(() => {
     const storedUser = JSON.parse(localStorage.getItem("user") || "{}");
     setUser(storedUser);
-    console.log(storedUser);
+    router.refresh();
   }, []);
 
   const logout = () => {
     localStorage.removeItem("user");
     setUser({});
+    router.push("/");
   };
 
   const { window } = props;
@@ -112,11 +115,11 @@ export default function Navbar(props: Props) {
               <Typography variant="button">TimeTable</Typography>
             </Link>
             <Divider orientation="vertical" sx={{ mx: 1 }} flexItem />
-            {user.length != 0 ? (
+            {Object.keys(user).length !== 0 ? (
               <>
                 <Button onClick={logout} sx={{ color: "#333" }}>
                   <Typography variant="button" sx={{ mr: 2 }}>
-                    Hi, {user[0]?.first_name}
+                    Hi, {user?.first_name}
                   </Typography>
                 </Button>
               </>
