@@ -13,15 +13,58 @@ import {
 } from "@mui/material";
 import { useState } from "react";
 
+import { register } from "@/app/_api/Auth";
+import { redirect } from "next/navigation";
+import axios from "axios";
+
 export default function Login() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
-  const [username, setUsername] = useState<number>();
+  const [username, setUsername] = useState("");
   const [firstName, setFirstName] = useState("");
   const [lastName, setLastName] = useState("");
+  const [error, setError] = useState("");
 
-  const handleClick = () => {
-    console.log("clicked");
+  const handleClick = async () => {
+    setError("");
+    if (!email || !password || !username || !firstName || !lastName) {
+      setError("All fields are required");
+      return;
+    }
+    if (email.split("@")[1] !== "geu.ac.in") {
+      setError("Please use your GEU email");
+      return;
+    }
+    if (password.length < 8) {
+      setError("Password should be at least 8 characters long");
+      return;
+    }
+
+    try {
+      const response = await axios.post(
+        "http://localhost:8000/api/User/",
+        {
+          username,
+          email,
+          password,
+          firstName,
+          lastName,
+        },
+        {
+          headers: {
+            "Content-Type": "application/json",
+          },
+        }
+      );
+
+      if (response.status === 201) {
+        redirect("/login");
+      } else {
+        setError("An error occurred, please try again");
+      }
+    } catch (error) {
+      setError("An error occurred, please try again");
+    }
   };
 
   return (
@@ -65,7 +108,7 @@ export default function Login() {
               fullWidth
               value={username}
               onChange={(e) => {
-                setUsername(parseInt(e.target.value));
+                setUsername(e.target.value);
               }}
               sx={{ mb: 1 }}
               required
@@ -105,6 +148,9 @@ export default function Login() {
               onChange={(e) => {
                 setEmail(e.target.value);
               }}
+              onFocus={(e) => {
+                setEmail(firstName + lastName + username + "@geu.ac.in");
+              }}
               sx={{ mb: 2 }}
               required
             />
@@ -129,6 +175,18 @@ export default function Login() {
                 Signup
               </Typography>
             </Button>
+            <Typography variant="subtitle2" textAlign={"center"} sx={{ mb: 2 }}>
+              By signing up, you agree to our Terms, Data Policy and Cookies
+              Policy
+            </Typography>
+            <Typography
+              variant="body1"
+              textAlign={"center"}
+              sx={{ mb: 2 }}
+              color={"error"}
+            >
+              {error}
+            </Typography>
             <Typography variant="body1" textAlign={"center"}>
               Already have an account?{" "}
               <Link href="/login" sx={{ textDecoration: "none" }}>

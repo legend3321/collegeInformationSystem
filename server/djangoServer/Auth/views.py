@@ -53,10 +53,12 @@ class UserAPIView(APIView):
         return Response(serializer.data)
 
     def post(self, request):
+        print(request.data)
         serializer = UserSerializer(data=request.data)
         if serializer.is_valid():
             serializer.save()
-        return Response(serializer.data)
+            return Response({"data": serializer.data}, status=201)
+        return Response({"error" : serializer.errors}, status=400)
 
     def put(self, request, pk):
         user = User.objects.get(id=pk)

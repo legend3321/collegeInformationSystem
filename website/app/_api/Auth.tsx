@@ -11,9 +11,26 @@ export const login = async (email: string, password: string) => {
   console.log(response);
   return response;
 };
-export const register = async (email: string, password: string) => {
-  return await axios.post("http://localhost:3000/api/register", {
-    email,
-    password,
-  });
+export const register = async (
+  email: string,
+  password: string,
+  username: string,
+  first_name: string,
+  last_name: string
+) => {
+  return await axios.post(
+    "http://localhost:8000/api/User/",
+    {
+      username,
+      email,
+      password,
+      first_name,
+      last_name,
+    },
+    {
+      headers: {
+        "Content-Type": "multipart/form-data",
+      },
+    }
+  );
 };
