@@ -12,22 +12,22 @@ import {
   FormControl,
 } from "@mui/material";
 import { useState } from "react";
-
-import { register } from "@/app/_api/Auth";
-import { redirect } from "next/navigation";
+import { useRouter } from "next/navigation";
 import axios from "axios";
 
 export default function Login() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [username, setUsername] = useState("");
-  const [firstName, setFirstName] = useState("");
-  const [lastName, setLastName] = useState("");
+  const [first_name, setfirst_name] = useState("");
+  const [last_name, setlast_name] = useState("");
   const [error, setError] = useState("");
+
+  const router = useRouter();
 
   const handleClick = async () => {
     setError("");
-    if (!email || !password || !username || !firstName || !lastName) {
+    if (!email || !password || !username || !first_name || !last_name) {
       setError("All fields are required");
       return;
     }
@@ -47,8 +47,8 @@ export default function Login() {
           username,
           email,
           password,
-          firstName,
-          lastName,
+          first_name,
+          last_name,
         },
         {
           headers: {
@@ -60,7 +60,7 @@ export default function Login() {
       console.log(response);
 
       if (response.status === 201) {
-        redirect("/login");
+        router.push("/login");
       } else {
         setError(response.data.error);
       }
@@ -123,9 +123,9 @@ export default function Login() {
                 label="First Name"
                 required
                 variant="outlined"
-                value={firstName}
+                value={first_name}
                 onChange={(e) => {
-                  setFirstName(e.target.value);
+                  setfirst_name(e.target.value);
                 }}
                 sx={{ mb: 2, flexGrow: 1 }}
               />
@@ -133,9 +133,9 @@ export default function Login() {
                 label="Last Name"
                 required
                 variant="outlined"
-                value={lastName}
+                value={last_name}
                 onChange={(e) => {
-                  setLastName(e.target.value);
+                  setlast_name(e.target.value);
                 }}
                 sx={{ mb: 2, flexGrow: 1 }}
               />
@@ -151,7 +151,7 @@ export default function Login() {
                 setEmail(e.target.value);
               }}
               onFocus={(e) => {
-                setEmail(firstName + lastName + username + "@geu.ac.in");
+                setEmail(first_name + last_name + username + "@geu.ac.in");
               }}
               sx={{ mb: 2 }}
               required
