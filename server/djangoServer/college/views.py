@@ -10,7 +10,10 @@ from .serializers import TimeTableSerializer, ExtraClassSerializer
 
 class TimeTableView(APIView):
     def get(self, request):
-        timetable = TimeTable.objects.all()
+        sections = list(TimeTable.objects.values("section").distinct())
+        timetable = []
+        for section in sections: 
+            timetable += TimeTable.objects.filter(section=section['section'])
         serializer = TimeTableSerializer(timetable, many=True)
         return Response(serializer.data)
     
