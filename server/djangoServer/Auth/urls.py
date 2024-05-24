@@ -11,7 +11,7 @@ urlpatterns = [
     path('teacher/<int:pk>/', views.get_teacher, name='teacher'),
     path('teacher/section/<int:pk>',views.get_section_teacher, name="teacher_section" ),
     path('department/', views.DepartmentAPIView.as_view(), name='department'),
+    path('department/section/<int:pk>/', views.get_department_section, name='section'),
     path('section/', views.SectionAPIView.as_view(), name='section'),
-    path('department/section/<int:pk>/', views.get_section, name='section'),
     path('course/', views.CourseAPIView.as_view(), name='course'),
 ]

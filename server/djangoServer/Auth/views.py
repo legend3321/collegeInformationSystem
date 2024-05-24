@@ -55,7 +55,8 @@ class UserAPIView(APIView):
     
 @api_view(['GET'])
 def get_student(request, pk):
-    students = Student.objects.filter(student_id=pk)
+    user = User.objects.get(id=pk)
+    students = Student.objects.filter(student_id=user.student.student_id)
     serializer = StudentSerializer(students, many=True)
     if serializer.data == []:
         return Response({'message':'No student found'}, status=204)
@@ -71,6 +72,9 @@ class StudentAPIView(APIView):
         serializer = StudentSerializer(data=request.data)
         if serializer.is_valid():
             serializer.save()
+        else:
+            print(serializer.errors)
+            return Response(serializer.errors, status=400)
         return Response(serializer.data)
 
     def put(self, request, pk):
@@ -89,7 +93,6 @@ class StudentAPIView(APIView):
 @api_view(['GET'])
 def get_teacher(request, pk):
     user = User.objects.get(id=pk)
-    print(user.teacher.teacher_id)
     teachers = Teacher.objects.filter(teacher_id = user.teacher.teacher_id)
     serializer = TeacherSerializer(teachers, many=True)
     if serializer.data == []:
@@ -145,7 +148,7 @@ class DepartmentAPIView(APIView):
         return Response('Department deleted successfully')
 
 @api_view(['GET'])
-def get_section(request, pk):
+def get_department_section(request, pk):
     sections = Section.objects.filter(section_department=pk)
     serializer = SectionSerializer(sections, many=True)
     if serializer.data == []:

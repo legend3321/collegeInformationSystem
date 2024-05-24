@@ -30,22 +30,21 @@ export default function StudentDashboard() {
 
   const [newUser, setNewUser] = useState(false);
 
+  const fetchData = async () => {
+    const temp = JSON.parse(localStorage.getItem("user") || "{}");
+    setUser(temp);
+
+    const response = await axios.get(
+      `http://localhost:8000/auth/student/${temp.id}/`
+    );
+
+    if (response.status === 200) {
+      setNewUser(false);
+    } else if (response.status === 204) {
+      setNewUser(true);
+    }
+  };
   useEffect(() => {
-    const fetchData = async () => {
-      const temp = JSON.parse(localStorage.getItem("user") || "{}");
-      setUser(temp);
-
-      const response = await axios.get(
-        `http://localhost:8000/auth/student/${user.id}/`
-      );
-
-      if (response.status === 200) {
-        console.log(response.data);
-      } else if (response.status === 204) {
-        setNewUser(true);
-      }
-    };
-
     fetchData();
   }, []);
   return <Box sx={{ py: 3 }}>{newUser ? <NewStudent /> : "Student"}</Box>;

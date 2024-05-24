@@ -45,11 +45,11 @@ export default function Page() {
         <>
           <StudentDashboard />
         </>
-      ) : (
+      ) : user?.groups[0] === 2 ? (
         <>
           <TeacherDashboard />
         </>
-      )}
+      ) : null}
     </Container>
   );
 }

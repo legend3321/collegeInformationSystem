@@ -10,8 +10,8 @@ class Teacher(models.Model):
     teacher_id = models.OneToOneField(User, on_delete=models.CASCADE)
     teacher_department = models.ForeignKey(Department, on_delete=models.DO_NOTHING)
     teacher_office = models.CharField(max_length=50)
-    teacher_phone = models.CharField(max_length=50)
-    teacher_description = models.CharField(max_length=200)
+    teacher_phone = models.CharField(max_length=50, null=True)
+    teacher_description = models.CharField(max_length=200, null=True)
 
 class Section(models.Model):
     section_id = models.AutoField(primary_key=True)
@@ -28,8 +28,8 @@ class Student(models.Model):
     student_department = models.ForeignKey(Department, on_delete=models.DO_NOTHING)
     student_semester = models.IntegerField()
     student_year = models.IntegerField()
-    student_phone = models.CharField(max_length=50)
-    student_description = models.CharField(max_length=200)
+    student_phone = models.CharField(max_length=50, blank=True, null=True)
+    student_description = models.CharField(max_length=200, blank=True, null=True)
 
 class Course(models.Model):
     course_id = models.AutoField(primary_key=True)
