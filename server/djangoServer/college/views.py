@@ -11,11 +11,14 @@ from .serializers import TimeTableSerializer, ExtraClassSerializer
 class TimeTableView(APIView):
     def get(self, request):
         sections = list(TimeTable.objects.values("section").distinct())
-        timetable = []
+        timetables = []
         for section in sections: 
-            timetable += TimeTable.objects.filter(section=section['section'])
-        serializer = TimeTableSerializer(timetable, many=True)
-        return Response(serializer.data)
+            timetables.append({"section" : section, "schedule" : TimeTable.objects.filter(section=section['section'])})
+
+        serializer = []
+        for timetable in timetables:
+            serializer.append({"section" : timetable['section'], "schedule" : TimeTableSerializer(timetable['schedule'], many=True).data})
+        return Response(serializer)
     
     def post(self, request):
         serializer = TimeTableSerializer(data=request.data)

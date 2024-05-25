@@ -6,6 +6,8 @@ import {
   Container,
   Divider,
   Link,
+  Menu,
+  MenuItem,
   Toolbar,
   Typography,
   useScrollTrigger,
@@ -24,15 +26,24 @@ export default function Navbar(props: Props) {
   const router = useRouter();
   const [user, setUser] = useState({} as any);
 
+  const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
+  const open = Boolean(anchorEl);
+  const handleClick = (event: React.MouseEvent<HTMLButtonElement>) => {
+    setAnchorEl(event.currentTarget);
+  };
+  const handleClose = () => {
+    setAnchorEl(null);
+  };
+
   useEffect(() => {
     const storedUser = JSON.parse(localStorage.getItem("user") || "{}");
     setUser(storedUser);
-    router.refresh();
   }, []);
 
   const logout = () => {
     localStorage.removeItem("user");
     setUser({});
+    handleClose();
     router.push("/");
   };
 
@@ -104,24 +115,33 @@ export default function Navbar(props: Props) {
             >
               <Typography variant="button">Map</Typography>
             </Link>
-            <Link
-              href="/timetable"
-              sx={{
-                textDecoration: "none",
-                color: "#333",
-                mx: { xs: 0, md: 1 },
-              }}
-            >
-              <Typography variant="button">TimeTable</Typography>
-            </Link>
             <Divider orientation="vertical" sx={{ mx: 1 }} flexItem />
             {Object.keys(user).length !== 0 ? (
               <>
-                <Button onClick={logout} sx={{ color: "#333" }}>
-                  <Typography variant="button" sx={{ mr: 2 }}>
-                    Hi, {user?.first_name}
-                  </Typography>
-                </Button>
+                <Box>
+                  <Button
+                    id="basic-button"
+                    aria-controls={open ? "basic-menu" : undefined}
+                    aria-haspopup="true"
+                    aria-expanded={open ? "true" : undefined}
+                    onClick={handleClick}
+                    sx={{ color: "#333" }}
+                  >
+                    hi {user?.first_name}
+                  </Button>
+                  <Menu
+                    id="basic-menu"
+                    anchorEl={anchorEl}
+                    open={open}
+                    onClose={handleClose}
+                    MenuListProps={{
+                      "aria-labelledby": "basic-button",
+                    }}
+                  >
+                    <MenuItem onClick={handleClose}>Profile</MenuItem>
+                    <MenuItem onClick={logout}>Logout</MenuItem>
+                  </Menu>
+                </Box>
               </>
             ) : (
               <>

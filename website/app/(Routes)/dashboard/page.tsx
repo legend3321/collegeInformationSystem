@@ -32,6 +32,7 @@ export default function Page() {
   });
 
   useEffect(() => {
+    router.refresh();
     if (localStorage.getItem("user") == null) router.push("/login");
     else {
       const temp = JSON.parse(localStorage.getItem("user") || "{}");
