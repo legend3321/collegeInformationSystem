@@ -1,6 +1,6 @@
 import NewStudent from "@/app/_components/newStudent";
+import Schedule from "@/app/_components/schedule";
 import { Box } from "@mui/material";
-import { red } from "@mui/material/colors";
 import axios from "axios";
 import { useEffect, useState } from "react";
 
@@ -30,12 +30,9 @@ export default function StudentDashboard() {
 
   const [newUser, setNewUser] = useState(false);
 
-  const fetchData = async () => {
-    const temp = JSON.parse(localStorage.getItem("user") || "{}");
-    setUser(temp);
-
+  const fetchData = async (id: string) => {
     const response = await axios.get(
-      `http://localhost:8000/auth/student/${temp.id}/`
+      `http://localhost:8000/auth/student/${id}/`
     );
 
     if (response.status === 200) {
@@ -44,8 +41,15 @@ export default function StudentDashboard() {
       setNewUser(true);
     }
   };
+
   useEffect(() => {
-    fetchData();
+    const temp = JSON.parse(localStorage.getItem("user") || "{}");
+    setUser(temp);
+    fetchData(temp.id);
   }, []);
-  return <Box sx={{ py: 3 }}>{newUser ? <NewStudent /> : "Student"}</Box>;
+  return (
+    <Box sx={{ py: 3 }}>
+      {newUser ? <NewStudent /> : <Schedule userId={user.id} />}
+    </Box>
+  );
 }

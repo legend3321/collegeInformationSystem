@@ -1,3 +1,4 @@
+import AddExtraClass from "@/app/_components/addExtraClass";
 import AddSection from "@/app/_components/addSection";
 import { Box } from "@mui/material";
 import axios from "axios";
@@ -13,7 +14,6 @@ export default function TeacherDashboard() {
         const response = await axios.get(
           `http://localhost:8000/auth/teacher/section/${user.id}`
         );
-        console.log(response);
         if (response.status === 200) {
           setIsInstructor(true);
         } else {
@@ -27,6 +27,8 @@ export default function TeacherDashboard() {
   }, []);
 
   return (
-    <Box sx={{ py: 3 }}>{isInstructor ? "Instructor" : <AddSection />}</Box>
+    <Box sx={{ py: 3 }}>
+      {isInstructor ? <AddExtraClass /> : <AddSection />}
+    </Box>
   );
 }

@@ -16,6 +16,9 @@ class StudentSerializer(serializers.ModelSerializer):
 
 
 class TeacherSerializer(serializers.ModelSerializer):
+    teacher_id = serializers.StringRelatedField()
+    teacher_department = serializers.StringRelatedField(source="teacher_department.department_name")
+
     class Meta:
         model = Teacher
         fields = '__all__'
@@ -32,9 +35,17 @@ class SectionSerializer(serializers.ModelSerializer):
         model = Section
         fields = '__all__'
 
+    def display_value(self):
+        return f"{self.section_name} | {self.section_semester}"
+
+
 
 class CourseSerializer(serializers.ModelSerializer):
+
     class Meta:
         model = Course
         fields = '__all__'
+
+    def display_value(self):
+        return self.course_name
 

@@ -3,7 +3,7 @@ from Auth.models import Course, Section, Teacher
 # Create your models here.
 
 class TimeTable(models.Model):
-    dayOfWeek = models.CharField(max_length=10)
+    day = models.CharField(max_length=10)
     start_time = models.TimeField()
     end_time = models.TimeField()
     subject = models.ForeignKey(Course, on_delete=models.CASCADE)

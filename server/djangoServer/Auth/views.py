@@ -150,10 +150,24 @@ class DepartmentAPIView(APIView):
 @api_view(['GET'])
 def get_department_section(request, pk):
     sections = Section.objects.filter(section_department=pk)
+    if(sections == []):
+        return Response({'message':'No section found'}, status=204)
     serializer = SectionSerializer(sections, many=True)
     if serializer.data == []:
         return Response({'message':'No section found'}, status=204)
     return Response(serializer.data)
+
+@api_view(['GET'])
+def get_teacher_department_section(request, pk):
+    try:
+        user = User.objects.get(id=pk)
+        sections = Section.objects.filter(section_department=user.teacher.teacher_department.department_id)
+        serializer = SectionSerializer(sections, many=True)
+        if serializer.data == []:
+            return Response({'message':'No section found'}, status=204)
+        return Response(serializer.data)
+    except User.teacher.RelatedObjectDoesNotExist:
+        return Response({'message':'No user found'}, status=204)
 
 @api_view(['GET'])
 def get_section_teacher(request, pk):
@@ -191,7 +205,13 @@ class SectionAPIView(APIView):
         section.delete()
         return Response('Section deleted successfully')
 
-
+@api_view(['GET'])
+def get_course(request, pk):
+    courses = Course.objects.filter(course_id=pk)
+    serializer = CourseSerializer(courses, many=True)
+    if serializer.data == []:
+        return Response({'message':'No course found'}, status=204)
+    return Response(serializer.data)
 class CourseAPIView(APIView):
     def get(self, request):
         courses = Course.objects.all()
