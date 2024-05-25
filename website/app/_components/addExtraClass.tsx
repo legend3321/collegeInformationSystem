@@ -113,15 +113,13 @@ export default function AddExtraClass() {
   const [description, setDescription] = useState("");
 
   const [user, setUser] = useState({ id: 0 });
+  const router = useRouter();
 
   const isSunday: (date: dayjs.Dayjs) => boolean = (date) => date.day() === 0; // Check for Sunday (0-indexed)
 
   const shouldDisableDate: (date: dayjs.Dayjs) => boolean = (date) => {
     return isSunday(date); // Disable Sundays and past dates
   };
-
-  //   console.log(dateValue.format("YYYY-MM-DD"));
-  console.log(DAYS[dateValue.day()]);
 
   const [courses, setCourses] = useState([]);
 
@@ -197,6 +195,7 @@ export default function AddExtraClass() {
     console.log(response);
     if (response.status === 201) {
       setError("Extra class added successfully");
+      router.refresh();
     } else if (response.status === 204) {
       setError(
         "An entry already exists for the given room, start time, and day"
