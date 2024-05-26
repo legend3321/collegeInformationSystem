@@ -47,6 +47,10 @@ export default function Navbar(props: Props) {
     router.push("/");
   };
 
+  const dashboard = () => {
+    router.push("/dashboard");
+    handleClose();
+  };
   const { window } = props;
 
   const trigger = useScrollTrigger({
@@ -138,6 +142,7 @@ export default function Navbar(props: Props) {
                       "aria-labelledby": "basic-button",
                     }}
                   >
+                    <MenuItem onClick={dashboard}>Dashboard</MenuItem>
                     <MenuItem onClick={handleClose}>Profile</MenuItem>
                     <MenuItem onClick={logout}>Logout</MenuItem>
                   </Menu>
