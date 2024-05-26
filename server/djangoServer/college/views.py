@@ -1,15 +1,14 @@
-from django.shortcuts import render
-
-
 from rest_framework.views import APIView # type: ignore
 from rest_framework.response import Response  # type: ignore
-from .models import TimeTable, ExtraClass, Course, Teacher
-from .serializers import TimeTableSerializer, ExtraClassSerializer
+from .models import TimeTable, ExtraClass, Course, Teacher, Attendence, Student
+from .serializers import TimeTableSerializer, ExtraClassSerializer, AttendenceSerializer
 from rest_framework.decorators import api_view # type: ignore
 from django.contrib.auth.models import User
 from college.models import ExtraClass
 
 from datetime import date, timedelta
+from college.models import Attendence, Student, Course
+from college.serializers import AttendenceSerializer
 
 # Create your views here.
 
@@ -139,4 +138,50 @@ class ExtraClassView(APIView):
         extraclass = ExtraClass.objects.get(id=pk)
         extraclass.delete()
         return Response('ExtraClass deleted successfully')
+    
+@api_view(['POST'])
+def get_attendence(request):
+    userid = request.data['userid']
+    user = User.objects.get(id=userid)
+    attendence = Attendence.objects.filter(student=user.student)
+    if attendence == None:
+        return Response('No attendence found for the given student', status=204)
+    serializer = AttendenceSerializer(attendence, many=True)
+    if serializer.data == []:
+        return Response('No attendence found for the given student', status=204)
+    return Response(serializer.data)
+
+class AttendenceView(APIView):
+    def get(self, request):
+        attendence = Attendence.objects.all()
+        serializer = AttendenceSerializer(attendence, many=True)
+        return Response(serializer.data)
+    
+    def post(self, request):
+        section = request.data['section']
+        attendences = request.data["attendence"]
+        subject = request.data['subject']
+        for attendence in attendences:
+            student = attendence.get('student')
+            status = attendence.get('status')
+            student = Student.objects.get(id=student)
+            subject = Course.objects.get(course_id=subject)
+            attendence_object = Attendence(student=student, subject=subject, status=status)
+            response = attendence_object.save()
+
+        return Response('Attendence added successfully', status=201)
+
+    
+    def put(self, request, pk):
+        attendence = Attendence.objects.get(id=pk)
+        serializer = AttendenceSerializer(instance=attendence, data=request.data)
+        if serializer.is_valid():
+            serializer.save()
+            return Response(serializer.data)
+        return Response(serializer.errors, status=400)
+    
+    def delete(self, request, pk):
+        attendence = Attendence.objects.get(id=pk)
+        attendence.delete()
+        return Response('Attendence deleted successfully')
 

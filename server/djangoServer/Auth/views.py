@@ -62,6 +62,16 @@ def get_student(request, pk):
         return Response({'message':'No student found'}, status=204)
     return Response(serializer.data)
 
+@api_view(['GET'])
+def get_section_students(request, pk):
+    students = Student.objects.filter(section=pk)
+    serializer = StudentSerializer(students, many=True)
+    if serializer.data == []:
+        return Response({'message':'No student found'}, status=204)
+    
+
+    return Response(serializer.data)
+
 class StudentAPIView(APIView):
     def get(self, request):
         students = Student.objects.all()
@@ -122,6 +132,14 @@ class TeacherAPIView(APIView):
         teacher = Teacher.objects.get(teacher_id=pk)
         teacher.delete()
         return Response('Teacher deleted successfully')
+    
+@api_view(['GET'])
+def get_department_course(request, pk):
+    courses = Course.objects.filter(course_department=pk)
+    serializer = CourseSerializer(courses, many=True)
+    if serializer.data == []:
+        return Response({'message':'No course found'}, status=204)
+    return Response(serializer.data)
     
 class DepartmentAPIView(APIView):
     def get(self, request):

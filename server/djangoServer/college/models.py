@@ -1,5 +1,6 @@
 from django.db import models
-from Auth.models import Course, Section, Teacher
+from Auth.models import Course, Section, Student, Teacher
+import datetime
 # Create your models here.
 
 class TimeTable(models.Model):
@@ -21,4 +22,12 @@ class ExtraClass(models.Model):
     teacher = models.ForeignKey(Teacher, on_delete=models.CASCADE)
     room = models.CharField(max_length=10)
     description = models.TextField()
+
+
+class Attendence(models.Model):
+    date = models.DateField(default=datetime.date.today)
+    student = models.ForeignKey(Student, on_delete=models.CASCADE)
+    subject = models.ForeignKey(Course, on_delete=models.CASCADE)
+    status = models.BooleanField(default=False)
+    description = models.TextField(null=True, blank=True)
     

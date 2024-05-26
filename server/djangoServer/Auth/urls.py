@@ -13,7 +13,9 @@ urlpatterns = [
     path('teacher/department/section/<int:pk>',views.get_teacher_department_section, name="teacher_department_section"),
     path('department/', views.DepartmentAPIView.as_view(), name='department'),
     path('department/section/<int:pk>/', views.get_department_section, name='section'),
+    path('department/course/<int:pk>/', views.get_department_course, name='course'),
     path('section/', views.SectionAPIView.as_view(), name='section'),
+    path('section/students/<int:pk>/', views.get_section_students, name='section_students'),
     path('course/', views.CourseAPIView.as_view(), name='course'),
     path('course/<int:pk>/', views.get_course, name='course'),
 ]

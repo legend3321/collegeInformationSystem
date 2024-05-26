@@ -1,5 +1,5 @@
 from rest_framework import serializers # type: ignore
-from .models import TimeTable, ExtraClass
+from .models import TimeTable, ExtraClass, Attendence
 from Auth.serializers import CourseSerializer
 
 class TimeTableSerializer(serializers.ModelSerializer):
@@ -19,4 +19,12 @@ class ExtraClassSerializer(serializers.ModelSerializer):
     
     class Meta:
         model = ExtraClass
+        fields = '__all__'
+
+class AttendenceSerializer(serializers.ModelSerializer):
+    student = serializers.StringRelatedField(source='student.student_id')
+    subject = CourseSerializer(read_only=True)
+    
+    class Meta:
+        model = Attendence
         fields = '__all__'

@@ -60,58 +60,54 @@ export default function SideNav(props: {
           !link.path.endsWith(
             pathname.split("/")[pathname.split("/").length - 1]
           ) ? (
-            <ListItem key={link.title}>
-              <Button
-                onClick={() => handleClick(link.path)}
-                size="small"
-                sx={{ py: { lg: 2, xs: 0 } }}
+            <ListItem key={link.title} onClick={() => handleClick(link.path)}>
+              <Tooltip title={link.title} placement="right">
+                <ListItemIcon
+                  sx={{ display: "flex", justifyContent: "center" }}
+                >
+                  {link.icon}
+                </ListItemIcon>
+              </Tooltip>
+              <ListItemText
+                sx={{ display: { lg: "none", xs: "none", sm: "block" } }}
               >
-                <Tooltip title={link.title} placement="right">
-                  <ListItemIcon
-                    sx={{ display: "flex", justifyContent: "center" }}
-                  >
-                    {link.icon}
-                  </ListItemIcon>
-                </Tooltip>
-                <ListItemText sx={{ display: { lg: "none", xs: "block" } }}>
-                  <Typography variant="subtitle1" sx={{ color: grey[50] }}>
-                    {link.title}
-                  </Typography>
-                </ListItemText>
-              </Button>
+                <Typography
+                  variant="subtitle1"
+                  sx={{ color: grey[50], textWrap: "nowrap" }}
+                >
+                  {link.title}
+                </Typography>
+              </ListItemText>
             </ListItem>
           ) : (
-            <ListItem key={link.title}>
-              <Button
-                onClick={() => handleClick(link.path)}
-                size="small"
-                sx={{ py: { lg: 2, xs: 0 } }}
-              >
-                <Tooltip title={link.title} placement="right">
-                  <ListItemIcon
-                    sx={{ display: "flex", justifyContent: "center" }}
+            <ListItem key={link.title} onClick={() => handleClick(link.path)}>
+              <Tooltip title={link.title} placement="right">
+                <ListItemIcon
+                  sx={{ display: "flex", justifyContent: "center" }}
+                >
+                  <Box
+                    sx={{
+                      bgcolor: orange[400],
+                      borderRadius: 5,
+                      width: 30,
+                      height: 30,
+                      display: "flex",
+                      justifyContent: "center",
+                      alignItems: "center",
+                    }}
                   >
-                    <Box
-                      sx={{
-                        bgcolor: orange[400],
-                        borderRadius: 5,
-                        width: 30,
-                        height: 30,
-                        display: "flex",
-                        justifyContent: "center",
-                        alignItems: "center",
-                      }}
-                    >
-                      {link.icon}
-                    </Box>
-                  </ListItemIcon>
-                </Tooltip>
-                <ListItemText sx={{ display: { lg: "none", xs: "block" } }}>
-                  <Typography variant="subtitle1" sx={{ color: grey[50] }}>
-                    {link.title}
-                  </Typography>
-                </ListItemText>
-              </Button>
+                    {link.icon}
+                  </Box>
+                </ListItemIcon>
+              </Tooltip>
+              <ListItemText sx={{ display: { lg: "none", xs: "block" } }}>
+                <Typography
+                  variant="subtitle1"
+                  sx={{ color: grey[50], textWrap: "nowrap" }}
+                >
+                  {link.title}
+                </Typography>
+              </ListItemText>
             </ListItem>
           )
         )}

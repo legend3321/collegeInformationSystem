@@ -10,6 +10,7 @@ class UserSerializer(serializers.ModelSerializer):
 
 
 class StudentSerializer(serializers.ModelSerializer):
+    student_id = UserSerializer(read_only=True)
     class Meta:
         model = Student
         fields = '__all__'
@@ -31,6 +32,7 @@ class DepartmentSerializer(serializers.ModelSerializer):
 
 
 class SectionSerializer(serializers.ModelSerializer):
+    section_department = serializers.StringRelatedField()
     class Meta:
         model = Section
         fields = '__all__'

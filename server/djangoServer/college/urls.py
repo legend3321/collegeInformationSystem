@@ -7,4 +7,6 @@ urlpatterns = [
     path('schedule/', views.get_schedule, name='schedule'),
     path('section/extraclass/', views.get_extraclass, name='extra_class'),
     path('teacher/extraclass/', views.get_extraclass_teacher, name='extra_class_teacher'),
+    path('attendence/', views.AttendenceView.as_view(), name='attendance'),
+    path('attendence/student/', views.get_attendence, name='attendance_student'),
 ]
