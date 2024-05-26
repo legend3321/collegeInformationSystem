@@ -1,8 +1,14 @@
-import { Box, Grid, MenuItem, TextField, Typography } from "@mui/material";
+"use client";
+import {
+  Container,
+  Grid,
+  MenuItem,
+  TextField,
+  Typography,
+} from "@mui/material";
 import axios from "axios";
-import { useState } from "react";
-import ScheduleCard from "./scheduleCard";
-import { motion } from "framer-motion";
+import { useEffect, useState } from "react";
+import ScheduleCard from "@/app/_components/scheduleCard";
 
 const DAYS = [
   "Sunday",
@@ -14,22 +20,28 @@ const DAYS = [
   "Saturday",
 ];
 
-export default function Schedule(userId: { userId: number }) {
+export default function Schedule() {
   const [schedule, setSchedule] = useState<any[]>([]);
   const [day, setDay] = useState(DAYS[new Date().getDay()]);
+  const [user, setUser] = useState<any>(localStorage.getItem("user"));
 
-  const getSchedule = async (day: string) => {
+  useEffect(() => {
+    const temp = JSON.parse(localStorage.getItem("user") || "{}");
+    setUser(temp);
+    getSchedule(day, temp.id);
+  }, [day]);
+
+  const getSchedule = async (day: string, id: number) => {
     const response = await axios.post(
       `http://localhost:8000/college/schedule/`,
       {
-        userid: userId.userId,
+        userid: id,
         day: day,
       }
     );
 
     if (response.status === 200) {
       setSchedule(response.data);
-      console.log(response.data);
     } else if (response.status === 204) {
       setSchedule([]);
       console.log("No schedule for today");
@@ -37,7 +49,7 @@ export default function Schedule(userId: { userId: number }) {
   };
 
   return (
-    <Box>
+    <Container sx={{ py: 3 }}>
       <Typography variant="h6">
         Schedule for{" "}
         <TextField
@@ -45,7 +57,7 @@ export default function Schedule(userId: { userId: number }) {
           value={day}
           onChange={(e) => {
             setDay(e.target.value);
-            getSchedule(e.target.value);
+            getSchedule(e.target.value, user.id);
           }}
           select
           sx={{ ml: 1, width: 200, fontSize: 20 }}
@@ -68,6 +80,6 @@ export default function Schedule(userId: { userId: number }) {
           ))
         )}
       </Grid>
-    </Box>
+    </Container>
   );
 }

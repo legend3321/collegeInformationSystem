@@ -8,6 +8,7 @@ import {
   TextField,
   Typography,
   Grid,
+  Container,
 } from "@mui/material";
 import { useEffect, useState } from "react";
 
@@ -46,7 +47,6 @@ export default function AddSection() {
     const teacher = await axios.get(
       `http://localhost:8000/auth/teacher/${user.id}/`
     );
-    console.log(teacher.data[0].id);
 
     const response = await axios.post("http://localhost:8000/auth/section/", {
       section_name: name,
@@ -64,7 +64,7 @@ export default function AddSection() {
   }
 
   return (
-    <Box sx={{ py: 3 }}>
+    <Container sx={{ py: 3 }}>
       <Grid container alignItems={"center"} justifyContent={"space-around"}>
         <Grid
           item
@@ -175,6 +175,6 @@ export default function AddSection() {
           </FormControl>
         </Grid>
       </Grid>
-    </Box>
+    </Container>
   );
 }

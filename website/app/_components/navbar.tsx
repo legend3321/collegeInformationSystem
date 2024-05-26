@@ -64,6 +64,7 @@ export default function Navbar(props: Props) {
         mb: 0,
         position: "sticky",
         top: 0,
+        zIndex: 1000,
         background: "rgba(255,255,255,.8)",
         backdropFilter: "blur(30px)",
         color: "black",

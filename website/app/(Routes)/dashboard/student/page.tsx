@@ -1,8 +1,9 @@
+"use client";
 import NewStudent from "@/app/_components/newStudent";
-import Schedule from "@/app/_components/schedule";
-import { Box } from "@mui/material";
+import { Container } from "@mui/material";
 import axios from "axios";
 import { useEffect, useState } from "react";
+import { useRouter } from "next/navigation";
 
 interface User {
   id: number;
@@ -19,6 +20,7 @@ interface User {
 }
 
 export default function StudentDashboard() {
+  const router = useRouter();
   const [user, setUser] = useState<User>({
     id: 0,
     username: "",
@@ -45,11 +47,10 @@ export default function StudentDashboard() {
   useEffect(() => {
     const temp = JSON.parse(localStorage.getItem("user") || "{}");
     setUser(temp);
+    if (temp.groups[0] === 2) router.push("/dashboard/teacher");
     fetchData(temp.id);
   }, []);
   return (
-    <Box sx={{ py: 3 }}>
-      {newUser ? <NewStudent /> : <Schedule userId={user.id} />}
-    </Box>
+    <Container sx={{ py: 3 }}>{newUser ? <NewStudent /> : <></>}</Container>
   );
 }

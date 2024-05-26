@@ -9,6 +9,7 @@ import {
   Typography,
   Grid,
   Slider,
+  Container,
 } from "@mui/material";
 import { useEffect, useState } from "react";
 
@@ -126,6 +127,7 @@ export default function AddExtraClass() {
   useEffect(() => {
     const temp = JSON.parse(localStorage.getItem("user") || "{}");
     setUser(temp);
+    if (temp.groups[0] === 1) router.push("/dashboard/student");
     getCourses();
     getSections(temp.id);
   }, []); // Run only once
@@ -206,7 +208,7 @@ export default function AddExtraClass() {
   }
 
   return (
-    <Box sx={{ py: 3 }}>
+    <Container sx={{ py: 3 }}>
       <Grid container alignItems={"center"} justifyContent={"space-around"}>
         <Grid
           item
@@ -251,7 +253,7 @@ export default function AddExtraClass() {
               onChange={handleChange}
               step={10}
               marks={MARKS}
-              sx={{ mb: 2 }}
+              sx={{ mb: 2, width: "95%", mx: "auto" }}
             />
             <Typography
               variant="body2"
@@ -325,7 +327,7 @@ export default function AddExtraClass() {
               sx={{ py: 2 }}
               onClick={handleSubmit}
             >
-              <Typography variant="button">Submit</Typography>
+              <Typography variant="button">Add Class</Typography>
             </Button>
             <Typography
               variant="caption"
@@ -338,6 +340,6 @@ export default function AddExtraClass() {
           </FormControl>
         </Grid>
       </Grid>
-    </Box>
+    </Container>
   );
 }

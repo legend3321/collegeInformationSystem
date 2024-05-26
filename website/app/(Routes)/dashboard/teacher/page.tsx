@@ -1,11 +1,11 @@
-import AddExtraClass from "@/app/_components/addExtraClass";
-import AddSection from "@/app/_components/addSection";
-import { Box } from "@mui/material";
+"use client";
+import { Box, Container } from "@mui/material";
 import axios from "axios";
+import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 
 export default function TeacherDashboard() {
-  const [isInstructor, setIsInstructor] = useState(false);
+  const router = useRouter();
 
   useEffect(() => {
     const user = JSON.parse(localStorage.getItem("user") || "{'id': ''}");
@@ -14,10 +14,8 @@ export default function TeacherDashboard() {
         const response = await axios.get(
           `http://localhost:8000/auth/teacher/section/${user.id}`
         );
-        if (response.status === 200) {
-          setIsInstructor(true);
-        } else {
-          setIsInstructor(false);
+        if (response.status === 204) {
+          router.push("/dashboard/teacher/addSection");
         }
       } catch (error) {
         console.error(error);
@@ -26,9 +24,5 @@ export default function TeacherDashboard() {
     fetchData();
   }, []);
 
-  return (
-    <Box sx={{ py: 3 }}>
-      {isInstructor ? <AddExtraClass /> : <AddSection />}
-    </Box>
-  );
+  return <Container sx={{ py: 3 }}></Container>;
 }

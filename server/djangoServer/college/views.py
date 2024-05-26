@@ -70,6 +70,20 @@ def get_extraclass(request):
         return Response('No extra class found for the given section and day', status=204)
     return Response(serializer.data)
 
+@api_view(['POST'])
+def get_extraclass_teacher(request):
+    userid = request.data['userid']
+    user = User.objects.get(id=userid)
+    if user.teacher == None:
+        return Response('No teacher found for the given user', status=204)
+    extraclass = ExtraClass.objects.filter(teacher=user.teacher)
+    if extraclass == None:
+        return Response('No extra class found for the given teacher and day', status=204)
+    serializer = ExtraClassSerializer(extraclass, many=True)
+    if serializer.data == []:
+        return Response('No extra class found for the given teacher and day', status=204)
+    return Response(serializer.data)
+
 class ExtraClassView(APIView):
     def get(self, request):
         extraclass = ExtraClass.objects.all()

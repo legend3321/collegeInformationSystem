@@ -2,8 +2,8 @@
 import { Container } from "@mui/material";
 import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
-import StudentDashboard from "./StudentDashboard";
-import TeacherDashboard from "./TeacherDashboard";
+import StudentDashboard from "./student/page";
+import TeacherDashboard from "./teacher/page";
 
 interface User {
   id: number;
@@ -37,20 +37,11 @@ export default function Page() {
     else {
       const temp = JSON.parse(localStorage.getItem("user") || "{}");
       setUser(temp);
+      console.log(temp.groups);
+      if (temp.groups[0] === 1) router.push("/dashboard/student");
+      else if (temp.groups[0] === 2) router.push("/dashboard/teacher");
     }
   }, []);
 
-  return (
-    <Container>
-      {user?.groups[0] === 1 ? (
-        <>
-          <StudentDashboard />
-        </>
-      ) : user?.groups[0] === 2 ? (
-        <>
-          <TeacherDashboard />
-        </>
-      ) : null}
-    </Container>
-  );
+  return <Container></Container>;
 }
