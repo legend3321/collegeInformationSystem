@@ -11,7 +11,7 @@ export default function Footer() {
       <Divider sx={{ mb: 2 }} />
       <Container>
         <Typography variant="body1" textAlign={"center"}>
-          © 2021 CSIT GEU. All rights reserved.
+          © 2024 CSIT GEU. All rights reserved.
         </Typography>
       </Container>
     </Box>
