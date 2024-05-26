@@ -9,7 +9,7 @@ import {
   Tooltip,
   Typography,
 } from "@mui/material";
-import { grey } from "@mui/material/colors";
+import { grey, orange } from "@mui/material/colors";
 import { useRouter, usePathname } from "next/navigation";
 
 export default function SideNav(props: {
@@ -46,7 +46,7 @@ export default function SideNav(props: {
         justifyContent: "center",
         alignItems: "center",
         alignContent: "center",
-        backdropFilter: "blur(50px)",
+        overflowx: "auto",
       }}
     >
       <List
@@ -63,7 +63,8 @@ export default function SideNav(props: {
             <ListItem key={link.title}>
               <Button
                 onClick={() => handleClick(link.path)}
-                sx={{ fontSize: 12 }}
+                size="small"
+                sx={{ py: { lg: 2, xs: 0 } }}
               >
                 <Tooltip title={link.title} placement="right">
                   <ListItemIcon
@@ -79,7 +80,40 @@ export default function SideNav(props: {
                 </ListItemText>
               </Button>
             </ListItem>
-          ) : null
+          ) : (
+            <ListItem key={link.title}>
+              <Button
+                onClick={() => handleClick(link.path)}
+                size="small"
+                sx={{ py: { lg: 2, xs: 0 } }}
+              >
+                <Tooltip title={link.title} placement="right">
+                  <ListItemIcon
+                    sx={{ display: "flex", justifyContent: "center" }}
+                  >
+                    <Box
+                      sx={{
+                        bgcolor: orange[400],
+                        borderRadius: 5,
+                        width: 30,
+                        height: 30,
+                        display: "flex",
+                        justifyContent: "center",
+                        alignItems: "center",
+                      }}
+                    >
+                      {link.icon}
+                    </Box>
+                  </ListItemIcon>
+                </Tooltip>
+                <ListItemText sx={{ display: { lg: "none", xs: "block" } }}>
+                  <Typography variant="subtitle1" sx={{ color: grey[50] }}>
+                    {link.title}
+                  </Typography>
+                </ListItemText>
+              </Button>
+            </ListItem>
+          )
         )}
       </List>
     </Box>

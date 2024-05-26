@@ -9,6 +9,8 @@ from rest_framework.decorators import api_view # type: ignore
 from django.contrib.auth.models import User
 from college.models import ExtraClass
 
+from datetime import date, timedelta
+
 # Create your views here.
 
 @api_view(['POST'])
@@ -72,17 +74,22 @@ def get_extraclass(request):
 
 @api_view(['POST'])
 def get_extraclass_teacher(request):
+    today = date.today()  
+    one_week = timedelta(days=7)
+    end_of_next_week = today + one_week
+
     userid = request.data['userid']
     user = User.objects.get(id=userid)
-    if user.teacher == None:
+    if user.teacher:
+        extraclass = ExtraClass.objects.filter(teacher=user.teacher, day__gte=today, day__lt=end_of_next_week + timedelta(days=1))
+        if extraclass == None:
+            return Response('No extra class found for the given teacher and day', status=204)
+        serializer = ExtraClassSerializer(extraclass, many=True)
+        if serializer.data == []:
+            return Response('No extra class found for the given teacher and day', status=204)
+        return Response(serializer.data)
+    else:
         return Response('No teacher found for the given user', status=204)
-    extraclass = ExtraClass.objects.filter(teacher=user.teacher)
-    if extraclass == None:
-        return Response('No extra class found for the given teacher and day', status=204)
-    serializer = ExtraClassSerializer(extraclass, many=True)
-    if serializer.data == []:
-        return Response('No extra class found for the given teacher and day', status=204)
-    return Response(serializer.data)
 
 class ExtraClassView(APIView):
     def get(self, request):

@@ -1,5 +1,5 @@
 import { Card, CardContent, Divider, Typography } from "@mui/material";
-import { orange } from "@mui/material/colors";
+import { orange, deepPurple } from "@mui/material/colors";
 import { motion } from "framer-motion";
 
 interface ScheduleCardProps {
@@ -14,16 +14,22 @@ interface ScheduleCardProps {
   description: string;
 }
 
-export default function ScheduleCard(props: { schedule: ScheduleCardProps }) {
+export default function ScheduleCard(props: {
+  schedule: ScheduleCardProps;
+  extra: boolean;
+}) {
   return (
     <Card
       sx={{
         p: 2,
-        width: { md: "400px", xs: "90%" },
-        bgcolor: orange[50],
-        borderRadius: 10,
-        boxShadow: "0px 30px 30px 1px #fff3e0",
-        border: "1px solid #ffcc80",
+        width: { md: "100%", xs: "90%" },
+        bgcolor: props.extra ? deepPurple[200] : orange[50],
+        borderRadius: 5,
+        boxShadow: props.extra
+          ? "0px 30px 40px -10px #b39ddb"
+          : "0px 20px 40px -10px #fff3e0",
+        border: props.extra ? "1px solid #512da8" : "1px solid #ffcc80",
+        mb: 5,
       }}
     >
       <motion.div

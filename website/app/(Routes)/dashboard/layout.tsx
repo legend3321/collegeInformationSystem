@@ -6,10 +6,16 @@ import AddIcon from "@mui/icons-material/Add";
 import PersonIcon from "@mui/icons-material/Person";
 import CalendarMonthIcon from "@mui/icons-material/CalendarMonth";
 import AccessTimeIcon from "@mui/icons-material/AccessTime";
+import HomeIcon from "@mui/icons-material/Home";
 
 import { grey } from "@mui/material/colors";
 
 const StudentLinks = [
+  {
+    title: "",
+    path: "/",
+    icon: <HomeIcon sx={{ color: grey[50] }} />,
+  },
   {
     title: "Schedule",
     path: "/schedule",
@@ -22,6 +28,11 @@ const StudentLinks = [
   },
 ];
 const TeacherLinks = [
+  {
+    title: "",
+    path: "/",
+    icon: <HomeIcon sx={{ color: grey[50] }} />,
+  },
   {
     title: "Extra Class",
     path: "/extraClass",
