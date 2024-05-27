@@ -22,4 +22,5 @@ urlpatterns = [
     path('admin/', admin.site.urls),
     path('auth/', include('Auth.urls')), # Add this line to include the Auth app's urls.py file
     path('college/', include('college.urls')), # Add this line to include the college app's urls.py file
+    path('map/', include('map.urls')), # Add this line to include the map app's urls.py file
 ]

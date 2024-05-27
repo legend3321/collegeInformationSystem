@@ -40,6 +40,7 @@ INSTALLED_APPS = [
     'corsheaders',
     'Auth',
     'college',
+    'map',
     'rest_framework',
 ]
 
