@@ -48,7 +48,7 @@ export default function Home() {
         <Typography variant="body1">
           A warm invitation for the Convocation Ceremony 2024 for CSE !
         </Typography>
-        <Typography variant="subtitle1">
+        <Typography variant="subtitle1" sx={{textAlign:"center"}}>
           It is with immense pleasure and pride that we extend this invitation
           to you for our upcoming Convocation Ceremony. This momentous occasion
           marks the culmination of your academic journey and the beginning of a
