@@ -25,9 +25,12 @@ class ExtraClass(models.Model):
 
 
 class Attendence(models.Model):
-    date = models.DateField(default=datetime.date.today)
+    date = models.DateField(auto_now_add=True)
     student = models.ForeignKey(Student, on_delete=models.CASCADE)
     subject = models.ForeignKey(Course, on_delete=models.CASCADE)
     status = models.BooleanField(default=False)
     description = models.TextField(null=True, blank=True)
+
+    def __str__(self):
+        return self.student.student_id.username + ' | ' + self.subject.course_name + ' | ' + str(self.date)
     

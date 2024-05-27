@@ -23,7 +23,7 @@ const StudentLinks = [
   },
   {
     title: "Attnedence",
-    path: "/attedence",
+    path: "/attendence",
     icon: <CalendarMonthIcon sx={{ color: grey[50] }} />,
   },
 ];

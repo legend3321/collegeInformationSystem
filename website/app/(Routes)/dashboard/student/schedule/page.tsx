@@ -71,7 +71,7 @@ export default function Schedule() {
   };
 
   return (
-    <Container sx={{ py: 3 }}>
+    <Container sx={{ py: 3, minHeight: "75vh" }}>
       <Typography variant="h6" textAlign={"center"}>
         Schedule for{" "}
         <TextField

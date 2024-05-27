@@ -51,6 +51,8 @@ export default function StudentDashboard() {
     fetchData(temp.id);
   }, []);
   return (
-    <Container sx={{ py: 3 }}>{newUser ? <NewStudent /> : <></>}</Container>
+    <Container sx={{ py: 3, minHeight: "75vh" }}>
+      {newUser ? <NewStudent /> : <></>}
+    </Container>
   );
 }

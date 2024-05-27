@@ -19,6 +19,7 @@ import {
 import axios from "axios";
 import dayjs from "dayjs";
 import { useEffect, useState } from "react";
+import { useRouter } from "next/navigation";
 
 export default function Page() {
   const [students, setStudents] = useState([]);
@@ -28,6 +29,7 @@ export default function Page() {
   const [section, setSection] = useState("");
   const [courses, setCourses] = useState([]);
   const [course, setCourse] = useState("");
+  const router = useRouter();
 
   const [attendence, setAttendence] = useState<
     {
@@ -45,9 +47,8 @@ export default function Page() {
         subject: course,
       }
     );
-    if (response.status === 200) {
-      console.log("Attendence added successfully");
-      console.log(response.data);
+    if (response.status === 201) {
+      router.push("/dashboard/teacher/");
     }
   };
 
@@ -55,7 +56,6 @@ export default function Page() {
     event: React.MouseEvent<HTMLElement>,
     newAttendence: { student: number; status: boolean }
   ) => {
-    console.log(newAttendence);
     setAttendence((attendence) => [...attendence, newAttendence]);
   };
 
@@ -75,7 +75,6 @@ export default function Page() {
       `http://localhost:8000/auth/department/course/${department}/`
     );
     if (response.status === 200) {
-      console.log(response.data);
       setCourses(response.data);
     }
   }

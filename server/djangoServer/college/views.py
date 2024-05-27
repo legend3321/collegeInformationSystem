@@ -143,7 +143,7 @@ class ExtraClassView(APIView):
 def get_attendence(request):
     userid = request.data['userid']
     user = User.objects.get(id=userid)
-    attendence = Attendence.objects.filter(student=user.student)
+    attendence = Attendence.objects.filter(student=user.student).order_by('date')
     if attendence == None:
         return Response('No attendence found for the given student', status=204)
     serializer = AttendenceSerializer(attendence, many=True)
@@ -158,16 +158,15 @@ class AttendenceView(APIView):
         return Response(serializer.data)
     
     def post(self, request):
-        section = request.data['section']
         attendences = request.data["attendence"]
         subject = request.data['subject']
+        subject = Course.objects.get(course_id=subject)
         for attendence in attendences:
             student = attendence.get('student')
             status = attendence.get('status')
             student = Student.objects.get(id=student)
-            subject = Course.objects.get(course_id=subject)
             attendence_object = Attendence(student=student, subject=subject, status=status)
-            response = attendence_object.save()
+            attendence_object.save()
 
         return Response('Attendence added successfully', status=201)
 
