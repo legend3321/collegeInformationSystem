@@ -6,7 +6,7 @@ import folium, geocoder
 import mapbox
 from math import radians, sin, cos, sqrt, atan2
 from geopy.geocoders import Nominatim
-
+import requests
 # Create your views here.
 
 @api_view(['GET'])
@@ -103,6 +103,21 @@ def directions(request):
         
         
         api_token = 'pk.eyJ1IjoibmF2ZWVuMzEiLCJhIjoiY2xyeWZ6b3J3MTRlazJscGVsdHJhNW52dyJ9.zkLVmB0FRWEvTZnwuh6Yyw'
+        # Changes Made by pratyush 
+
+        url = f"https://api.mapbox.com/directions/v5/mapbox/cycling/{location1.longitude},{location1.latitude};{location2.longitude},{location2.latitude}?steps=true&geometries=geojson&access_token={api_token}"
+        response = requests.get(url)
+        data = response.json()
+        
+        if 'routes' not in data or not data['routes']:
+            raise ValueError("No route found")
+
+        routes = data['routes'][0]['legs'][0]['steps']
+        direction_route = []
+        for route in routes:
+            direction_route.append(route['maneuver']['instruction'])
+        print(direction_route)
+
         data = get_mapbox_directions(api_token, source_coords, destination_coords)
         route_coords = data['geometry']['coordinates']
         r=[(long,lan) for lan,long in route_coords]
@@ -150,5 +165,5 @@ def directions(request):
         'walking_duration': walking_duration,
         'source': source,
         'destination': destination,
-        'route_coords': r,
+        'route_coords': direction_route,
     })
