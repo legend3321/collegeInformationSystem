@@ -39,11 +39,6 @@ const TeacherLinks = [
     icon: <AddIcon sx={{ color: grey[50] }} />,
   },
   {
-    title: "Students",
-    path: "/students",
-    icon: <PersonIcon sx={{ color: grey[50] }} />,
-  },
-  {
     title: "Attendence",
     path: "/attendence",
     icon: <CalendarMonthIcon sx={{ color: grey[50] }} />,

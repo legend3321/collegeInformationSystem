@@ -47,7 +47,7 @@ export default function TeacherDashboard() {
   }, []);
 
   return (
-    <Container sx={{ py: 3 }}>
+    <Container sx={{ py: 3, minHeight: "75vh" }}>
       {extraClasses.length !== 0 ? (
         <Box sx={{ mb: 2 }}>
           <Typography variant="h4">Extra Classes</Typography>

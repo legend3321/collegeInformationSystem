@@ -116,7 +116,6 @@ def directions(request):
         direction_route = []
         for route in routes:
             direction_route.append(route['maneuver']['instruction'])
-        print(direction_route)
 
         data = get_mapbox_directions(api_token, source_coords, destination_coords)
         route_coords = data['geometry']['coordinates']
@@ -165,5 +164,6 @@ def directions(request):
         'walking_duration': walking_duration,
         'source': source,
         'destination': destination,
-        'route_coords': direction_route,
+        'route_instructions': direction_route,
+        'route_coords': route_coords,
     })

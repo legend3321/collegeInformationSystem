@@ -51,6 +51,14 @@ export default function Navbar(props: Props) {
     router.push("/dashboard");
     handleClose();
   };
+
+  const profile = () => {
+    if (user.groups[0] == 1) router.push("/dashboard/student/profile");
+    else if (user.groups[0] == 2) router.push("/dashboard/teacher/profile");
+
+    handleClose();
+  };
+
   const { window } = props;
 
   const trigger = useScrollTrigger({
@@ -144,7 +152,7 @@ export default function Navbar(props: Props) {
                     }}
                   >
                     <MenuItem onClick={dashboard}>Dashboard</MenuItem>
-                    <MenuItem onClick={handleClose}>Profile</MenuItem>
+                    <MenuItem onClick={profile}>Profile</MenuItem>
                     <MenuItem onClick={logout}>Logout</MenuItem>
                   </Menu>
                 </Box>

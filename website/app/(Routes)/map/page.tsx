@@ -13,8 +13,8 @@ import {
   TableCell,
 } from "@mui/material";
 import axios from "axios";
-import { use, useState, useEffect } from "react";
-// import mapboxgl from "mapbox-gl"; // Import the 'mapbox-gl' library
+import { useState, useEffect } from "react";
+import ArrowForwardIcon from "@mui/icons-material/ArrowForward";
 
 export default function Page() {
   const [mapDisplay, setMapDisplay] = useState("");
@@ -23,6 +23,9 @@ export default function Page() {
   const [locations, setLocations] = useState([]);
   const [walkingDistance, setWalkingDistance] = useState(0);
   const [walkingTime, setWalkingTime] = useState(0);
+  const [routeInstructions, setRouteInstructions] = useState([]);
+
+  const [location, setLocation] = useState([]);
 
   async function loadMap() {
     const response = await axios.get("http://localhost:8000/map/");
@@ -50,6 +53,7 @@ export default function Page() {
       setMapDisplay(response.data.map);
       setWalkingDistance(response.data.walking_distance);
       setWalkingTime(response.data.walking_duration);
+      setRouteInstructions(response.data.route_instructions);
     }
   }
 
@@ -77,11 +81,34 @@ export default function Page() {
         </Table>
       ) : null}
 
-      <Box sx={{ mt: 5, w: { xs: "100%", md: "50%" }, mx: "auto" }}>
+      <Box sx={{ mt: 3, display: "flex", justifyContent: "center" }}>
+        {routeInstructions.length > 0 ? (
+          <>
+            {routeInstructions.map((routeInstruction, index) => {
+              return (
+                <Box sx={{ mt: 2, display: "flex", alignItems: "center" }}>
+                  <Box sx={{ ml: 1 }}>{routeInstruction}</Box>
+                  {index < routeInstructions.length - 1 ? (
+                    <ArrowForwardIcon />
+                  ) : null}
+                </Box>
+              );
+            })}
+          </>
+        ) : null}
+      </Box>
+
+      <Box
+        sx={{
+          mt: 5,
+          width: { xs: "100%", md: "50%" },
+          mx: "auto",
+        }}
+      >
         <FormControl fullWidth>
           <TextField
             select
-            label="source"
+            label="Source"
             value={source}
             onChange={(e) => setSource(e.target.value)}
           >

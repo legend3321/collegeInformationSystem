@@ -11,6 +11,8 @@ class UserSerializer(serializers.ModelSerializer):
 
 class StudentSerializer(serializers.ModelSerializer):
     student_id = UserSerializer(read_only=True)
+    section = serializers.StringRelatedField(source="section.section_name")
+    student_department = serializers.StringRelatedField(source="student_department.department_name")
     class Meta:
         model = Student
         fields = '__all__'

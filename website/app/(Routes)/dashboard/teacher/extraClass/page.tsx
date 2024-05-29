@@ -197,7 +197,7 @@ export default function AddExtraClass() {
     console.log(response);
     if (response.status === 201) {
       setError("Extra class added successfully");
-      router.refresh();
+      router.push("/dashboard/teacher");
     } else if (response.status === 204) {
       setError(
         "An entry already exists for the given room, start time, and day"
