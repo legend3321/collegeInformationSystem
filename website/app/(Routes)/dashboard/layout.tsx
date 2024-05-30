@@ -12,8 +12,8 @@ import { grey } from "@mui/material/colors";
 
 const StudentLinks = [
   {
-    title: "",
-    path: "/",
+    title: "Profile",
+    path: "/profile",
     icon: <HomeIcon sx={{ color: grey[50] }} />,
   },
   {
@@ -29,8 +29,8 @@ const StudentLinks = [
 ];
 const TeacherLinks = [
   {
-    title: "",
-    path: "/",
+    title: "Profile",
+    path: "/profile",
     icon: <HomeIcon sx={{ color: grey[50] }} />,
   },
   {
