@@ -71,11 +71,11 @@ export default function Page() {
           <TableBody>
             <TableRow>
               <TableCell align="right">Walking Distance</TableCell>
-              <TableCell align="left">{walkingDistance}</TableCell>
+              <TableCell align="left">{walkingDistance} mts</TableCell>
             </TableRow>
             <TableRow>
               <TableCell align="right">Walking Time</TableCell>
-              <TableCell align="left">{walkingTime}</TableCell>
+              <TableCell align="left">{walkingTime} mins</TableCell>
             </TableRow>
           </TableBody>
         </Table>
